@@ -8,6 +8,9 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite'
 // 配置 vant UI 组件库的解析器
 import { VantResolver } from 'unplugin-vue-components/resolvers'
+// 配置 svg 图标的插件
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import path from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -19,6 +22,9 @@ export default defineConfig({
     Components({
       dts: false,
       resolvers: [VantResolver({ importStyle: false })]
+    }),
+    createSvgIconsPlugin({
+      iconDirs: [path.resolve(process.cwd(), 'src/icons')]
     })
   ],
   resolve: {

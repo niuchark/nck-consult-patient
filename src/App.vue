@@ -3,10 +3,8 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div class="app">
-    <!-- 一级路由出口 -->
-    <RouterView />
-  </div>
+  <!-- 一级路由出口 -->
+  <RouterView />
 </template>
 
 <style scoped lang="scss">
