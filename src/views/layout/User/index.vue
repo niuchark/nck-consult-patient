@@ -1,13 +1,71 @@
 <script setup lang="ts">
 import { getUserInfo } from '@/services/user'
 import type { UserInfo } from '@/types/user'
+import { showConfirmDialog } from 'vant'
 import { onMounted, ref } from 'vue'
+import { useUserStore } from '@/stores'
+import { useRouter } from 'vue-router'
 
 const user = ref<UserInfo>()
 onMounted(async () => {
   const res = await getUserInfo()
   user.value = res.data
 })
+
+// 初始化快捷工具
+// 给一个非响应式的静态数组，基于数组渲染结构即可
+const tools = [
+  {
+    label: '我的问诊',
+    path: '/user/consult',
+    key: 'consult'
+  },
+  {
+    label: '我的处方',
+    path: '/',
+    key: 'prescription'
+  },
+  {
+    label: '家庭档案',
+    path: '/user/patient',
+    key: 'patient'
+  },
+  {
+    label: '地址管理',
+    path: '/',
+    key: 'address'
+  },
+  {
+    label: '我的评价',
+    path: '/',
+    key: 'comment'
+  },
+  {
+    label: '官方客服',
+    path: '/',
+    key: 'customer'
+  },
+  {
+    label: '设置',
+    path: '/',
+    key: 'setting'
+  }
+]
+
+// 退出登录
+const store = useUserStore()
+const router = useRouter()
+const onLogout = async () => {
+  await showConfirmDialog({
+    title: '温馨提示',
+    message: '是否确认退出医疗问诊？',
+    confirmButtonText: '确定',
+    cancelButtonText: '取消'
+  })
+  // 点击确认之后
+  store.delUser()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -73,6 +131,24 @@ onMounted(async () => {
         </van-col>
       </van-row>
     </div>
+    <!-- 快捷工具 -->
+    <div class="user-page-group">
+      <h3>快捷工具</h3>
+      <van-cell
+        v-for="(item, index) in tools"
+        :key="index"
+        :title="item.label"
+        :to="item.path"
+        is-link
+        :border="false"
+      >
+        <template #icon>
+          <cp-icon :name="`user-tool-0${index + 1}`" />
+        </template>
+      </van-cell>
+    </div>
+    <!-- 退出登陆 -->
+    <a href="javascript:;" class="logout" @click="onLogout">退出登陆</a>
   </div>
 </template>
 

@@ -17,6 +17,11 @@ const router = createRouter({
       meta: { title: '登录' }
     },
     {
+      path: '/user/patient',
+      component: () => import('@/views/layout/User/PatientPage.vue'),
+      meta: { title: '家庭档案' }
+    },
+    {
       path: '/',
       component: () => import('@/views/layout/index.vue'),
       redirect: '/home',
@@ -60,7 +65,7 @@ router.beforeEach((to) => {
 })
 
 router.afterEach((to) => {
-  document.title = `${to.meta.title || ''}-优医问诊`
+  document.title = `${to.meta.title || ''}-医疗问诊`
   // 关闭进度条
   NProgress.done()
 })
