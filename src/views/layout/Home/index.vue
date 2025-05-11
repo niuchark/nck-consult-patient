@@ -1,4 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+const active = ref(1)
+import KnowledgeList from './components/KnowledgeList.vue'
+import FollowDoctor from './components/FollowDoctor.vue'
+</script>
 
 <template>
   <div class="home-page">
@@ -74,6 +79,21 @@
         </van-swipe-item>
       </van-swipe>
     </div>
+    <van-tabs shrink sticky v-model:active="active">
+      <van-tab title="关注">
+        <follow-doctor></follow-doctor>
+        <knowledge-list type="like" />
+      </van-tab>
+      <van-tab title="推荐">
+        <knowledge-list type="recommend" />
+      </van-tab>
+      <van-tab title="减脂">
+        <knowledge-list type="fatReduction" />
+      </van-tab>
+      <van-tab title="饮食" type="food">
+        <knowledge-list type="food" />
+      </van-tab>
+    </van-tabs>
   </div>
 </template>
 
