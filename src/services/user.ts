@@ -36,7 +36,7 @@ export const editPatient = (patient: Patient) =>
 // 删除患者
 export const delPatient = (id: string) => request(`patient/del/${id}`, 'DELETE')
 
-// 患者详情
+// 获取患者详情信息
 export const getPatientDetail = (id: string) =>
   request<Patient>(`patient/info/${id}`)
 

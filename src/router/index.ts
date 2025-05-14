@@ -37,6 +37,19 @@ const router = createRouter({
       meta: { title: '病情描述' }
     },
     {
+      path: '/consult/pay',
+      component: () => import('@/views/Consult/ConsultPay.vue'),
+      meta: { title: '问诊支付' }
+    },
+    {
+      path: '/room',
+      component: () => import('@/views/Room/index.vue'),
+      meta: { title: '问诊室' },
+      beforeEnter(to) {
+        if (to.query.payResult === 'false') return '/user/consult'
+      }
+    },
+    {
       path: '/',
       component: () => import('@/views/layout/index.vue'),
       redirect: '/home',
