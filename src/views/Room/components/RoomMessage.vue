@@ -2,12 +2,26 @@
 import { IllnessTime, MsgType } from '@/enums'
 import { timeOptions, flagOptions } from '@/services/constants'
 import type { Image } from '@/types/consult'
-import type { Message } from '@/types/room'
+import type { Message, Prescription } from '@/types/room'
 import { showImagePreview, showToast } from 'vant'
 import dayjs from 'dayjs'
 import { useUserStore } from '@/stores'
 import { useShowPrescription } from '@/composables'
 import EvaluateCard from './EvaluateCard.vue'
+import { useRouter } from 'vue-router'
+import { PrescriptionStatus } from '@/enums'
+
+// 点击购买药品的跳转
+const router = useRouter()
+const buy = (pre?: Prescription) => {
+  if (pre) {
+    if (pre.status === PrescriptionStatus.Invalid)
+      return showToast('处方已失效')
+    if (pre.status === PrescriptionStatus.NotPayment && !pre.orderId)
+      return router.push(`/order/pay?id=${pre.id}`)
+    router.push(`/order/${pre.orderId}`)
+  }
+}
 
 const store = useUserStore()
 // 格式化时间

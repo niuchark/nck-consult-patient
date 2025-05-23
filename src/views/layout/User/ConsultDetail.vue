@@ -5,6 +5,12 @@ import type { ConsultOrderItem } from '@/types/consult'
 import { getConsultFlagText, getIllnessTimeText } from '@/utils/filter'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useCancelOrder } from '@/composables'
+import { useClipboard } from '@vueuse/core'
+import { showToast } from 'vant'
+
+const { loading, cancelConsultOrder } = useCancelOrder()
+const show = ref(false)
 
 const route = useRoute()
 const item = ref<ConsultOrderItem>()
@@ -12,6 +18,15 @@ onMounted(async () => {
   const res = await getConsultOrderDetail(route.params.id as string)
   item.value = res.data
 })
+
+// 复制功能
+// 复制
+const { copy, isSupported } = useClipboard()
+const onCopy = async () => {
+  if (!isSupported.value) return showToast('未授权，不支持')
+  await copy(item.value?.orderNo || '')
+  showToast('已复制')
+}
 </script>
 
 <template>
@@ -61,7 +76,7 @@ onMounted(async () => {
       <van-cell-group :border="false">
         <van-cell title="订单编号">
           <template #value>
-            <span class="copy">复制</span>
+            <span class="copy" @click="onCopy()">复制</span>
             {{ item.orderNo }}
           </template>
         </van-cell>
@@ -76,17 +91,82 @@ onMounted(async () => {
         />
       </van-cell-group>
     </div>
-    <!-- <div class="detail-time">
-      请在 <van-count-down :time="10000 * 1000" /> 内完成支付，超时订单将取消
-    </div> -->
-    <div class="detail-action van-hairline--top">
+    <div class="detail-time" v-if="item.status === OrderType.ConsultPay">
+      请在
+      <van-count-down :time="item.countdown * 1000" />
+      内完成支付，超时订单将取消
+    </div>
+
+    <div
+      class="detail-action van-hairline--top"
+      v-if="item.status === OrderType.ConsultPay"
+    >
       <div class="price">
         <span>需付款</span>
-        <span>￥39.00</span>
+        <span>￥{{ item.actualPayment }}</span>
       </div>
-      <van-button type="default" round>取消问诊</van-button>
-      <van-button type="primary" round>继续支付</van-button>
+      <van-button
+        type="default"
+        round
+        :loading="loading"
+        @click="cancelConsultOrder(item!)"
+        >取消问诊</van-button
+      >
+      <van-button type="primary" round @click="show = true"
+        >继续支付</van-button
+      >
     </div>
+    <div
+      class="detail-action van-hairline--top"
+      v-if="item.status === OrderType.ConsultWait"
+    >
+      <van-button
+        type="default"
+        round
+        :loading="loading"
+        @click="cancelConsultOrder(item!)"
+        >取消问诊</van-button
+      >
+      <van-button type="primary" round :to="`/room?orderId=${item.id}`">
+        继续沟通
+      </van-button>
+    </div>
+    <div
+      class="detail-action van-hairline--top"
+      v-if="item.status === OrderType.ConsultChat"
+    >
+      <van-button type="default" round v-if="item.prescriptionId">
+        查看处方
+      </van-button>
+      <van-button type="primary" round :to="`/room?orderId=${item.id}`">
+        继续沟通
+      </van-button>
+    </div>
+    <div
+      class="detail-action van-hairline--top"
+      v-if="item.status === OrderType.ConsultComplete"
+    >
+      <consult-more></consult-more>
+      <van-button type="default" round :to="`/room?orderId=${item.id}`">
+        问诊记录
+      </van-button>
+      <van-button type="default" round v-if="item.evaluateId">
+        查看评价
+      </van-button>
+      <van-button type="primary" round v-else> 写评价 </van-button>
+    </div>
+    <div
+      class="detail-action van-hairline--top"
+      v-if="item.status === OrderType.ConsultCancel"
+    >
+      <van-button type="default" round>删除订单</van-button>
+      <van-button type="primary" round to="/">咨询其他医生</van-button>
+    </div>
+    <cp-pay-sheet
+      v-model:show="show"
+      :order-id="item.id"
+      :actualPayment="item.actualPayment"
+    />
   </div>
   <!-- 骨架屏效果 -->
   <div class="consult-detail-page" v-else>
