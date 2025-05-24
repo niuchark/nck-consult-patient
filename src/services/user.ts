@@ -49,6 +49,7 @@ export const loginByQQ = (openId: string) =>
     source: 'qq'
   })
 
+// 绑定手机
 export const bindMobile = (data: {
   mobile: string
   code: string

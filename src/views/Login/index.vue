@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { mobileRules, passwordRules, codeRules } from '@/utils/rules'
-import { showSuccessToast, showToast, type FormInstance } from 'vant'
-import { loginByMobile, loginByPassword, sendMobileCode } from '@/services/user'
+import { showSuccessToast, showToast } from 'vant'
+import { loginByMobile, loginByPassword } from '@/services/user'
 import { useUserStore } from '@/stores'
 import { useRouter, useRoute } from 'vue-router'
+import { useSendCode } from '@/composables'
 
 const mobile = ref('')
 const password = ref('')
@@ -28,28 +29,7 @@ const isPass = ref(true)
 const code = ref('') // 短信验证码
 
 // 发送短信验证码
-const form = ref<FormInstance>()
-const time = ref(0) // 倒计时
-let timer: number // 定义一个定时器ID，用于清理定时器
-const onSend = async () => {
-  // 验证：倒计时 手机号
-  if (time.value) return
-  await form.value?.validate('mobile')
-  await sendMobileCode(mobile.value, 'login')
-  showToast('发送成功')
-  time.value = 60
-  // 开启倒计时
-  if (timer) clearInterval(timer) // 保险起见在启动计时器清除已有的计时器
-  timer = setInterval(() => {
-    time.value--
-    if (time.value <= 0) clearInterval(timer)
-  }, 1000)
-}
-
-// 在倒计时结束前组件如果销毁，计时器也要销毁
-onMounted(() => {
-  clearInterval(timer)
-})
+const { onSend, time, form } = useSendCode(mobile)
 
 // 控制密码的可见和不可见
 const isShow = ref()
@@ -137,66 +117,18 @@ const isShow = ref()
     <div class="login-other">
       <van-divider>第三方登录</van-divider>
       <div class="icon">
-        <img src="@/assets/qq.svg" alt="" />
+        <a
+          @click="store.setReturnUrl(route.query.returnUrl as string)"
+          class="icon"
+          href="https://graph.qq.com/oauth2.0/authorize?client_id=102015968&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fconsult-patients.itheima.net%2Flogin%2Fcallback"
+        >
+          <img src="@/assets/qq.svg" alt="" />
+        </a>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.login {
-  &-page {
-    padding-top: 46px;
-  }
-  &-head {
-    display: flex;
-    padding: 30px 30px 50px;
-    justify-content: space-between;
-    align-items: flex-end;
-    line-height: 1;
-    h3 {
-      font-weight: normal;
-      font-size: 24px;
-    }
-    a {
-      font-size: 15px;
-    }
-  }
-  &-other {
-    margin-top: 60px;
-    padding: 0 30px;
-    .icon {
-      display: flex;
-      justify-content: center;
-      img {
-        width: 36px;
-        height: 36px;
-        padding: 4px;
-      }
-    }
-  }
-}
-.van-form {
-  padding: 0 14px;
-  .cp-cell {
-    height: 52px;
-    line-height: 24px;
-    padding: 14px 16px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    .van-checkbox {
-      a {
-        color: var(--cp-primary);
-        padding: 0 5px;
-      }
-    }
-  }
-  .btn-send {
-    color: var(--cp-primary);
-    &.active {
-      color: rgba(22, 194, 163, 0.5);
-    }
-  }
-}
+@use '@/styles/login.scss';
 </style>

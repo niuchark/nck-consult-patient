@@ -14,6 +14,11 @@ import path from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    port: 80,
+    host: true,
+    allowedHosts: ['consult-patients.itheima.net']
+  },
   plugins: [
     vue(),
     vueDevTools(),

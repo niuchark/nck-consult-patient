@@ -75,6 +75,16 @@ const router = createRouter({
       meta: { title: '药品订单详情' }
     },
     {
+      path: '/order/logistics/:id',
+      component: () => import('@/views/Order/OrderLogistics.vue'),
+      meta: { title: '物流详情' }
+    },
+    {
+      path: '/login/callback',
+      component: () => import('@/views/Login/LoginCallback.vue'),
+      meta: { title: 'QQ登录-绑定手机' }
+    },
+    {
       path: '/',
       component: () => import('@/views/layout/index.vue'),
       redirect: '/home',
@@ -111,7 +121,7 @@ router.beforeEach((to) => {
   // 用户仓库
   const store = useUserStore()
   // 不需要登录的页面，白名单
-  const wihteList = ['/login']
+  const wihteList = ['/login', 'login/callback']
   // 如果没有登录且不在白名单内，去登录
   if (!store.user?.token && !wihteList.includes(to.path)) return '/login'
   // 否则不做任何处理

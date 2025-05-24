@@ -16,10 +16,17 @@ export const useUserStore = defineStore(
       user.value = undefined
     }
 
+    // 4. 设置QQ登陆成功后回调地址（不是跳转QQ登陆，而是成功后调回登陆前被拦截的页面）
+    const returnUrl = ref<string>()
+    const setReturnUrl = (url: string) => {
+      returnUrl.value = url
+    }
     return {
       user,
       setUser,
-      delUser
+      delUser,
+      setReturnUrl,
+      returnUrl
     }
   },
   {
