@@ -66,26 +66,26 @@ https://app.mockplus.cn/app/share-0b84e2dbfaff1c5cee6797a0dc513c32share-dtKxarcn
 25. 生产环境配置方案
 26. CI/CD 持续集成自动部署方案
 
-## Project Setup   ##项目设置
+## Project Setup
 
-```sh   ' ' ' sh
+```sh
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development编译和热加载开发
+### Compile and Hot-Reload for Development
 
-```sh   ' ' ' sh
+```sh
 pnpm dev
 ```
 
 ### Type-Check, Compile and Minify for Production
 
-```sh   ' ' ' sh
-pnpm build   规划建设
+```shh
+pnpm build
 ```
 
-### Lint with [ESLint](https://eslint.org/)### Lint与[ESLint]（https://eslint.org/）
+### Lint with [ESLint](https://eslint.org/)
 
-```sh   ' ' ' sh
-pnpm lint   规划线头
+```sh
+pnpm lin
 ```
