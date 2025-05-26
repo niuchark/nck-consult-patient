@@ -21,7 +21,21 @@ https://apifox.com/apidoc/shared/aeb0d03e-c713-4f55-afaf-21cddf542751
 https://app.mockplus.cn/app/share-0b84e2dbfaff1c5cee6797a0dc513c32share-dtKxarcngm8/prototype/hVYdS3V_q5lz?hmsr=share&shareID=dtKxarcngm8
 # 🙈部分页面展示
 
+<img src=".\imgs\home.png" style="zoom:67%;" />
 
+<img src=".\imgs\user.png" style="zoom:67%;" />
+
+<img src=".\imgs\fast.png" style="zoom:67%;" />
+
+<img src=".\imgs\consultPatient.png" style="zoom:67%;" />
+
+<img src=".\imgs\consult.png" style="zoom:67%;" />
+
+<img src=".\imgs\pay.png" style="zoom: 67%;" />
+
+<img src=".\imgs\room.png" style="zoom:33%;" />
+
+# 
 
 # 👊技术方案
 
