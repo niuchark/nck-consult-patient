@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
+    <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%=VITE_APP_TITLE%></title>
   </head>
   <body>
     <div id="app"></div>
@@ -12,8 +12,11 @@
     <script
       src="https://connect.qq.com/qc_jssdk.js"
       data-appid="102015968"
-      data-redirecturi="http://consult-patients.itheima.net/login/callback"
+      data-redirecturi="<%=VITE_APP_CALLBACK%>/login/callback"
     ></script>
-
+        <% if(DEV){ %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/eruda/2.4.1/eruda.min.js"></script>
+    <script>eruda.init()</script>
+    <% } %>
   </body>
 </html>

@@ -166,6 +166,7 @@ const onCopy = async () => {
       v-model:show="show"
       :order-id="item.id"
       :actualPayment="item.actualPayment"
+      pay-callback="/room"
     />
   </div>
   <!-- 骨架屏效果 -->

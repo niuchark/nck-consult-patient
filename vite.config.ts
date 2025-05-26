@@ -11,15 +11,23 @@ import { VantResolver } from 'unplugin-vue-components/resolvers'
 // 配置 svg 图标的插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import path from 'node:path'
+import { createHtmlPlugin } from 'vite-plugin-html'
+import { viteMockServe } from 'vite-plugin-mock'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './',
   server: {
     port: 80,
     host: true,
     allowedHosts: ['consult-patients.itheima.net']
   },
   plugins: [
+    viteMockServe({
+      mockPath: './src/mock',
+      enable: true
+    }),
+    createHtmlPlugin(),
     vue(),
     vueDevTools(),
     // 小问题：在自动引入组件时也会自动引入样式
